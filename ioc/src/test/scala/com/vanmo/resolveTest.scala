@@ -1,9 +1,9 @@
 package com.vanmo
-import com.vanmo.ioc.errors.ResolveError
-import org.scalatest.funsuite.AnyFunSuite
-import scala.concurrent.duration._
 
-import scala.concurrent.{ Await, Future }
+import org.scalatest.funsuite.AnyFunSuite
+
+import scala.concurrent.duration.*
+import scala.concurrent.Future
 import scala.util.Try
 
 class resolveTest extends AnyFunSuite {
@@ -20,7 +20,7 @@ class resolveTest extends AnyFunSuite {
 
     resolve(UNREGISTER)(TestKeys.SimpleKey)
 
-    assertThrows[ResolveError] {
+    assertThrows[errors.ResolveError] {
       println(resolve(TestKeys.SimpleKey, "42"))
     }
   }
@@ -40,7 +40,7 @@ class resolveTest extends AnyFunSuite {
     }
 
     assert(resolve(CURRENT_SCOPE) == gScope)
-    assertThrows[ResolveError] {
+    assertThrows[errors.ResolveError] {
       println(resolve(TestKeys.SimpleKey, "42"))
     }
   }
@@ -56,20 +56,4 @@ class resolveTest extends AnyFunSuite {
     assert(resolve(CURRENT_SCOPE) == gScope)
     assert(res.isFailure)
   }
-
-  test("Async operations in separate scope") {
-    import scala.concurrent.ExecutionContext.Implicits.global
-    val gScope = resolve(CURRENT_SCOPE)
-    println(gScope)
-
-    val scope = Await.result(
-      Future {
-        resolve(CURRENT_SCOPE)
-      },
-      1.seconds
-    )
-
-    assert(scope != gScope)
-  }
-
 }

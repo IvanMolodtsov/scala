@@ -1,14 +1,13 @@
 package com.vanmo.ioc.scopes
 
-import com.vanmo.common.{ IDependency, Key }
-import com.vanmo.ioc.errors.ResolveError
+import com.vanmo.common.{ IDependency, Key, Store }
 
 import scala.collection.{ concurrent, mutable }
 import scala.util.{ Failure, Success, Try }
 
 class Scope(private val parent: IScope) extends MutableScope {
 
-  private val dict: mutable.Map[String, IDependency[_, _]] = concurrent.TrieMap()
+  private val dict: mutable.Map[String, IDependency[_, _]] = Store()
 
   override def get[P, R](key: String): IDependency[P, R] =
     dict.get(key) match

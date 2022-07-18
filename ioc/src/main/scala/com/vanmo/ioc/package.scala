@@ -10,29 +10,23 @@ import scala.util.{ DynamicVariable, Try }
 package object ioc {
 
   private[ioc] object GlobalScope {
-    val root: RootScope                       = new RootScope()
-    private val _current: ThreadLocal[IScope] = ThreadLocal.withInitial[IScope](() => new Scope(root))
-    def current: IScope                       = _current.get()
-    def current_=(value: IScope): Unit        = _current.set(value)
+    val root: RootScope = new RootScope()
 
-//    private val _current = new DynamicVariable[Option[IScope]](None)
-//
-//    def current: IScope = _current.value match {
-//      case Some(scope) =>
-//        print("get ")
-//        print(scope)
-//        scope
-//
-//      case None =>
-//        val defult = new Scope(root)
-//        print("null ")
-//        println(defult)
-//        defult
+    private val _current = new DynamicVariable[Option[IScope]](None)
 
-//    def current_=(value: IScope): Unit = {
-//      print("set ")
-//      println(value)
-//      _current.value = Some(value)
+    def current: IScope =
+      _current.value match {
+
+        case Some(scope) =>
+          scope
+
+        case None =>
+          _current.value = Some(new Scope(root))
+          _current.value.get
+      }
+
+    def current_=(value: IScope): Unit =
+      _current.value = Some(value)
   }
 
   extension (sc: StringContext) {

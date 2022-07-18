@@ -8,14 +8,19 @@ lazy val commonSettings = Seq(
     "-unchecked",
     "-deprecation"
   ),
-  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.12" % "test"
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.12" % "test"
 )
-lazy val ioc = (project in file("ioc"))
+
+lazy val ioc = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("ioc"))
   .settings(commonSettings)
   .dependsOn(common)
 
-lazy val common = (project in file("common"))
+lazy val common = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Full)
+  .in(file("common"))
   .settings(commonSettings)
 
 lazy val root = (project in file("."))
-  .aggregate(ioc, common)
+  .aggregate(ioc.js, ioc.jvm, common.js, common.jvm)

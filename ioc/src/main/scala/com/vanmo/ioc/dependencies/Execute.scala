@@ -1,8 +1,7 @@
 package com.vanmo.ioc.dependencies
 
 import com.vanmo.common.IDependency
-import com.vanmo.ioc.errors.ResolveError
-import com.vanmo.ioc.{ resolve, scopes, CURRENT_SCOPE, SET_SCOPE }
+import com.vanmo.ioc.{ resolve, CURRENT_SCOPE, SET_SCOPE }
 import com.vanmo.ioc.scopes.IScope
 
 import scala.util.{ Failure, Success, Try }
