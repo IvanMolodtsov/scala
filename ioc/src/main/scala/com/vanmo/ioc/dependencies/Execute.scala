@@ -9,11 +9,14 @@ import scala.util.{ Failure, Success, Try }
 
 object Execute extends IDependency[IScope, Execute.ScopeGuard] {
   class ScopeGuard(scope: IScope, originalScope: IScope) {
-    def apply[T](f: () => Try[T]): Try[T] =
+
+    def apply[T](f: () => T): Try[T] = {
       resolve(SET_SCOPE, scope)
-      val res = f()
+      val res = Try(f())
       resolve(SET_SCOPE, originalScope)
       res
+    }
+
   }
 
   override def apply(scope: IScope): ScopeGuard = new ScopeGuard(scope, resolve(CURRENT_SCOPE))

@@ -9,9 +9,12 @@ import com.vanmo.ioc.{
   EXECUTE_IN_SCOPE,
   GlobalScope,
   NEW_SCOPE,
-  REGISTER
+  REGISTER,
+  ROOT_SCOPE,
+  SET_SCOPE,
+  UNREGISTER
 }
-import com.vanmo.ioc.dependencies.{ Execute, NewScope }
+import com.vanmo.ioc.dependencies.{ Execute, NewScope, Unregister }
 import com.vanmo.ioc.errors.ResolveError
 
 import java.util.concurrent.ConcurrentHashMap
@@ -22,8 +25,15 @@ class RootScope extends IScope {
 
   private val dict: mutable.Map[String, IDependency[_, _]] = concurrent.TrieMap(
     REGISTER -> dependencies.Register,
+    UNREGISTER -> Unregister,
+    ROOT_SCOPE -> { _ =>
+      GlobalScope.root
+    },
     CURRENT_SCOPE -> { _ =>
       GlobalScope.current
+    },
+    SET_SCOPE -> { scope =>
+      GlobalScope.current = scope
     },
     NEW_SCOPE -> NewScope,
     EXECUTE_IN_SCOPE -> Execute,
@@ -36,5 +46,5 @@ class RootScope extends IScope {
   override def get[P, R](key: String): IDependency[P, R] =
     dict.get(key) match
       case Some(dep) => dep.asInstanceOf[IDependency[P, R]]
-      case None => throw new ResolveError(message = s"Dependency $key not found", cause = None)
+      case None => throw new ResolveError(message = s"Dependency $key not found")
 }

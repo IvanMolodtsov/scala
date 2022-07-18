@@ -7,7 +7,8 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
     "-unchecked",
     "-deprecation"
-  )
+  ),
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.12" % "test"
 )
 lazy val ioc = (project in file("ioc"))
   .settings(commonSettings)

@@ -6,7 +6,7 @@ import com.vanmo.ioc.errors.ResolveError
 import scala.collection.{ concurrent, mutable }
 import scala.util.{ Failure, Success, Try }
 
-class Scope(private val parent: IScope) extends IScope, MutableScope {
+class Scope(private val parent: IScope) extends MutableScope {
 
   private val dict: mutable.Map[String, IDependency[_, _]] = concurrent.TrieMap()
 
@@ -18,4 +18,8 @@ class Scope(private val parent: IScope) extends IScope, MutableScope {
   override def set[P, R](key: String, d: IDependency[P, R]): Unit =
     dict.addOne(key -> d)
 
+  override def remove[P, R](key: String): Option[IDependency[P, R]] =
+    dict.remove(key) match
+      case Some(dep) => Some(dep.asInstanceOf[IDependency[P, R]])
+      case None => None
 }
