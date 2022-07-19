@@ -1,9 +1,9 @@
 package com.vanmo.ioc.scopes
 
-import com.vanmo.common.{ IDependency, Key, Store }
+import com.vanmo.common.{IDependency, Store}
 
-import scala.collection.{ concurrent, mutable }
-import scala.util.{ Failure, Success, Try }
+import scala.collection.mutable
+import scala.util.{Failure, Success, Try}
 
 class Scope(private val parent: IScope) extends MutableScope {
 

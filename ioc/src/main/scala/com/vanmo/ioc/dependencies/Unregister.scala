@@ -1,8 +1,8 @@
 package com.vanmo.ioc.dependencies
 
-import com.vanmo.common.{ IDependency, Key }
+import com.vanmo.common.{IDependency, Key}
 import com.vanmo.ioc.errors.ResolveError
-import com.vanmo.ioc.{ resolve, CURRENT_SCOPE }
+import com.vanmo.ioc.{CURRENT_SCOPE, resolve}
 import com.vanmo.ioc.scopes.MutableScope
 
 object Unregister extends IDependency[Null, Unregister.Command] {

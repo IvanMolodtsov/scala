@@ -1,10 +1,11 @@
-package com.vanmo
+package com.vanmo.tests
 
 import org.scalatest.funspec.AsyncFunSpec
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.Future
 
 class asyncTest extends AsyncFunSpec {
   import com.vanmo.ioc._
+
   it("async test") {
     val gScope = resolve(CURRENT_SCOPE)
     println(gScope)

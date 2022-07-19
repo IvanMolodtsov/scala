@@ -1,13 +1,13 @@
 package com.vanmo
 
-import com.vanmo.common.{ IDependency, Key }
-import com.vanmo.ioc.scopes.{ IScope, RootScope, Scope }
-import com.vanmo.ioc.dependencies.{ Execute, Register, Unregister }
-
-import scala.concurrent.ExecutionContext
-import scala.util.{ DynamicVariable, Try }
+import com.vanmo.common.{IDependency, Key}
+import com.vanmo.ioc.dependencies.{Execute, Register, Unregister}
+import com.vanmo.ioc.scopes.{IScope, RootScope, Scope}
 
 package object ioc {
+
+  import scala.concurrent.ExecutionContext
+  import scala.util.{ DynamicVariable, Try }
 
   private[ioc] object GlobalScope {
     val root: RootScope = new RootScope()
@@ -29,10 +29,6 @@ package object ioc {
       _current.value = Some(value)
   }
 
-  extension (sc: StringContext) {
-    def k(): Key[Any, Any] = new Key[Any, Any](sc.toString) {}
-  }
-
   object REGISTER extends Key[Null, Register.Command]("IoC.REGISTER")
   object UNREGISTER extends Key[Null, Unregister.Command]("IoC.Unregister")
   object ROOT_SCOPE extends Key[Null, IScope]("IoC.ROOT_SCOPE")
@@ -41,6 +37,10 @@ package object ioc {
   object NEW_SCOPE extends Key[Option[IScope], IScope]("Scope.NEW")
   object EXECUTE_IN_SCOPE extends Key[IScope, Execute.ScopeGuard]("IoC.EXECUTE_IN_SCOPE")
   object EXECUTE_IN_NEW_SCOPE extends Key[Null, Execute.ScopeGuard]("IoC.EXECUTE_IN_NEW_SCOPE")
+
+  extension (sc: StringContext) {
+    def k(): Key[Any, Any] = new Key[Any, Any](sc.toString) {}
+  }
 
   def inject[P, R](key: Key[P, R]): IDependency[P, R] =
     GlobalScope.current.get[P, R](key.toString)

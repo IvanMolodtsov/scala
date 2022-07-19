@@ -1,9 +1,6 @@
-package com.vanmo
+package com.vanmo.tests
 
 import org.scalatest.funsuite.AnyFunSuite
-
-import scala.concurrent.duration.*
-import scala.concurrent.Future
 import scala.util.Try
 
 class resolveTest extends AnyFunSuite {

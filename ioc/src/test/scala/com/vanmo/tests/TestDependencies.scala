@@ -1,4 +1,4 @@
-package com.vanmo
+package com.vanmo.tests
 
 import com.vanmo.common.IDependency
 

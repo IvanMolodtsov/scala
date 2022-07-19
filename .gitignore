@@ -1,7 +1,10 @@
 *.class
 *.log
 
+.metals
+.vscode
 .idea
 .bsp
 target
-*/**/target
+target
+.bloop
