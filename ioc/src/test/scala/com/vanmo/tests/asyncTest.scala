@@ -1,34 +1,40 @@
 package com.vanmo.tests
 
-import org.scalatest.funspec.AsyncFunSpec
+import org.scalatest.funsuite.AnyFunSuite
 import scala.concurrent.Future
+import org.scalatest.BeforeAndAfter
+import com.vanmo.ioc.scopes.IScope
 
-class asyncTest extends AsyncFunSpec {
+class asyncTest extends AnyFunSuite with BeforeAndAfter {
   import com.vanmo.ioc._
 
-  it("async test") {
+  test("async test") {
+
     val gScope = resolve(CURRENT_SCOPE)
-    println(gScope)
+
     val s = resolve(NEW_SCOPE, None)
 
-    val asserts = Future {
-      resolve(SET_SCOPE, s)
-      resolve(REGISTER)(
-        TestKeys.SimpleKey,
-        TestDependencies.SimpleDependency
-      )
-      resolve(TestKeys.SimpleKey, "42")
-    }.map { _ =>
-      val scope = resolve(CURRENT_SCOPE)
-      assert(scope !== gScope)
-
+    val t = Future {
+      resolve(EXECUTE_IN_SCOPE, s) { () =>
+        resolve(REGISTER)(
+          TestKeys.SimpleKey,
+          TestDependencies.SimpleDependency
+        )
+        resolve(TestKeys.SimpleKey, "42")
+        val scope = resolve(CURRENT_SCOPE)
+        assert(scope !== gScope)
+      }
     }
-    val scope = resolve(CURRENT_SCOPE)
-    assert(scope == gScope)
+    await(
+      t,
+      { () =>
+        val scope = resolve(CURRENT_SCOPE)
+        assert(scope == gScope)
 
-    assertThrows[errors.ResolveError] {
-      println(resolve(TestKeys.SimpleKey, "42"))
-    }
-    asserts
+        assertThrows[errors.ResolveError] {
+          println(resolve(TestKeys.SimpleKey, "42"))
+        }
+      }
+    )
   }
 }

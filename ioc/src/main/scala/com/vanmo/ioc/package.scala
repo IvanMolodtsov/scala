@@ -1,8 +1,8 @@
 package com.vanmo
 
-import com.vanmo.common.{IDependency, Key}
-import com.vanmo.ioc.dependencies.{Execute, Register, Unregister}
-import com.vanmo.ioc.scopes.{IScope, RootScope, Scope}
+import com.vanmo.common.{ IDependency, Key }
+import com.vanmo.ioc.dependencies.{ Execute, Register, Unregister }
+import com.vanmo.ioc.scopes.{ IScope, RootScope, Scope }
 
 package object ioc {
 
@@ -12,7 +12,7 @@ package object ioc {
   private[ioc] object GlobalScope {
     val root: RootScope = new RootScope()
 
-    private val _current = new DynamicVariable[Option[IScope]](None)
+    val _current = new DynamicVariable[Option[IScope]](None)
 
     def current: IScope =
       _current.value match {

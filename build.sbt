@@ -23,6 +23,7 @@ lazy val common = crossProject(JSPlatform, JVMPlatform)
   .in(file("common"))
   .settings(commonSettings)
   .settings(idePackagePrefix := Some("com.vanmo.common"))
+  .jsSettings(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0")
 
 lazy val root = (project in file("."))
   .aggregate(ioc.js, ioc.jvm, common.js, common.jvm)
