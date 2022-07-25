@@ -1,3 +1,3 @@
 package com.vanmo.common
 
-trait ICommand extends (() => Unit)
+trait ICommand extends Function0[Unit]

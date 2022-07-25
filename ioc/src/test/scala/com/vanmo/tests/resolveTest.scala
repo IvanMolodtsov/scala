@@ -2,8 +2,9 @@ package com.vanmo.tests
 
 import org.scalatest.funsuite.AnyFunSuite
 import scala.util.Try
+import org.scalatest.BeforeAndAfterEach
 
-class resolveTest extends AnyFunSuite {
+class resolveTest extends AnyFunSuite with BeforeAndAfterEach {
   import com.vanmo.ioc._
 
   test("Register\\Unregister works") {
@@ -25,7 +26,7 @@ class resolveTest extends AnyFunSuite {
   test("Execute in scope works") {
     val gScope = resolve(CURRENT_SCOPE)
 
-    resolve(EXECUTE_IN_NEW_SCOPE) { () =>
+    resolve(EXECUTE_IN_NEW_SCOPE) {
       assert(gScope != resolve(CURRENT_SCOPE))
       resolve(REGISTER)(
         TestKeys.SimpleKey,
@@ -45,7 +46,7 @@ class resolveTest extends AnyFunSuite {
   test("Execute in scope error pass through") {
     val gScope = resolve(CURRENT_SCOPE)
 
-    val res = resolve(EXECUTE_IN_NEW_SCOPE) { () =>
+    val res = resolve(EXECUTE_IN_NEW_SCOPE) {
       assert(gScope != resolve(CURRENT_SCOPE))
       throw new Error("Exec error")
     }

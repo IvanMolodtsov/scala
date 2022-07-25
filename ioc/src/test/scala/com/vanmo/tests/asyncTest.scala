@@ -4,36 +4,24 @@ import org.scalatest.funsuite.AnyFunSuite
 import scala.concurrent.Future
 import org.scalatest.BeforeAndAfter
 import com.vanmo.ioc.scopes.IScope
+import scala.concurrent.ExecutionContext
 
 class asyncTest extends AnyFunSuite with BeforeAndAfter {
   import com.vanmo.ioc._
+  implicit val ec: ExecutionContext = resolve(EXECUTION_CONTEXT, context)
 
-  test("async test") {
-
+  test("Futures execute in a separate scope") {
     val gScope = resolve(CURRENT_SCOPE)
-
-    val s = resolve(NEW_SCOPE, None)
-
-    val t = Future {
-      resolve(EXECUTE_IN_SCOPE, s) { () =>
-        resolve(REGISTER)(
-          TestKeys.SimpleKey,
-          TestDependencies.SimpleDependency
-        )
-        resolve(TestKeys.SimpleKey, "42")
+    val t =
+      Future {
         val scope = resolve(CURRENT_SCOPE)
         assert(scope !== gScope)
       }
-    }
-    await(
-      t,
-      { () =>
-        val scope = resolve(CURRENT_SCOPE)
-        assert(scope == gScope)
 
-        assertThrows[errors.ResolveError] {
-          println(resolve(TestKeys.SimpleKey, "42"))
-        }
+    await(
+      t, {
+        val scope = resolve(CURRENT_SCOPE)
+        assert(scope === gScope)
       }
     )
   }

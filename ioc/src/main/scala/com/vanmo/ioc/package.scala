@@ -3,6 +3,7 @@ package com.vanmo
 import com.vanmo.common.{ IDependency, Key }
 import com.vanmo.ioc.dependencies.{ Execute, Register, Unregister }
 import com.vanmo.ioc.scopes.{ IScope, RootScope, Scope }
+import scala.concurrent.Future
 
 package object ioc {
 
@@ -37,13 +38,7 @@ package object ioc {
   object NEW_SCOPE extends Key[Option[IScope], IScope]("Scope.NEW")
   object EXECUTE_IN_SCOPE extends Key[IScope, Execute.ScopeGuard]("IoC.EXECUTE_IN_SCOPE")
   object EXECUTE_IN_NEW_SCOPE extends Key[Null, Execute.ScopeGuard]("IoC.EXECUTE_IN_NEW_SCOPE")
-
-  extension (sc: StringContext) {
-    def k(): Key[Any, Any] = new Key[Any, Any](sc.toString) {}
-  }
-
-  def inject[P, R](key: Key[P, R]): IDependency[P, R] =
-    GlobalScope.current.get[P, R](key.toString)
+  object EXECUTION_CONTEXT extends Key[ExecutionContext, ExecutionContext]("IoC.EXECUTION_CONTEXT")
 
   final def resolve[P, R](key: Key[P, R], args: P): R =
     GlobalScope.current.get[P, R](key.toString)(args)

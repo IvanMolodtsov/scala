@@ -10,9 +10,9 @@ import com.vanmo.ioc.GlobalScope
 object Execute extends IDependency[IScope, Execute.ScopeGuard] {
   class ScopeGuard(scope: IScope, originalScope: IScope) {
 
-    def apply[T](f: () => T): Try[T] =
+    def apply[T](f: => T): Try[T] =
       GlobalScope._current.withValue(Some(scope)) {
-        Try(f())
+        Try(f)
       }
 
   }

@@ -1,14 +1,24 @@
 package com.vanmo.ioc.scopes
 
-import com.vanmo.common.{IDependency, Store}
+import com.vanmo.common.{ IDependency, Store }
 import com.vanmo.ioc.errors.ResolveError
-import com.vanmo.ioc.dependencies.{Execute, Register, Unregister, NewScope}
-import com.vanmo.ioc.{ resolve, GlobalScope,
-  CURRENT_SCOPE, EXECUTE_IN_NEW_SCOPE, EXECUTE_IN_SCOPE, NEW_SCOPE, REGISTER, ROOT_SCOPE, SET_SCOPE, UNREGISTER
+import com.vanmo.ioc.dependencies.{ Execute, ExecutionScope, NewScope, Register, Unregister }
+import com.vanmo.ioc.{
+  resolve,
+  CURRENT_SCOPE,
+  EXECUTE_IN_NEW_SCOPE,
+  EXECUTE_IN_SCOPE,
+  EXECUTION_CONTEXT,
+  GlobalScope,
+  NEW_SCOPE,
+  REGISTER,
+  ROOT_SCOPE,
+  SET_SCOPE,
+  UNREGISTER
 }
 
 import scala.collection.mutable
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 class RootScope extends IScope {
 
@@ -29,7 +39,8 @@ class RootScope extends IScope {
     EXECUTE_IN_NEW_SCOPE -> { _ =>
       val scope = resolve(NEW_SCOPE, None)
       resolve(EXECUTE_IN_SCOPE, scope)
-    }
+    },
+    EXECUTION_CONTEXT -> ExecutionScope
   )
 
   override def get[P, R](key: String): IDependency[P, R] =
