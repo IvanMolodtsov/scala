@@ -1,10 +1,12 @@
 package com.vanmo.tests
 
-import org.scalatest.funsuite.AnyFunSuite
-import scala.concurrent.Future
+import scala.concurrent.{Future, ExecutionContext}
+import scala.util.Failure
+
 import org.scalatest.BeforeAndAfter
+import org.scalatest.funsuite.AnyFunSuite
+
 import com.vanmo.ioc.scopes.IScope
-import scala.concurrent.ExecutionContext
 
 class asyncTest extends AnyFunSuite with BeforeAndAfter {
   import com.vanmo.ioc._
@@ -19,9 +21,33 @@ class asyncTest extends AnyFunSuite with BeforeAndAfter {
       }
 
     await(
-      t, {
+      t,
+      { _ =>
         val scope = resolve(CURRENT_SCOPE)
         assert(scope === gScope)
+      }
+    )
+  }
+
+  test("Future fail doesn't pollute global scope") {
+    val gScope = resolve(CURRENT_SCOPE)
+    val t =
+      Future {
+        val scope = resolve(CURRENT_SCOPE)
+        assert(scope !== gScope)
+        throw Error("Future failed")
+      }
+
+    await(
+      t,
+      { res =>
+        val scope = resolve(CURRENT_SCOPE)
+        assert(scope === gScope)
+
+        res match {
+          case Some(Failure(ex)) => assert(true)
+          case _ => assert(false)
+        }
       }
     )
   }

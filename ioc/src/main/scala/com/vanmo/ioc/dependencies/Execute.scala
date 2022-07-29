@@ -1,11 +1,11 @@
 package com.vanmo.ioc.dependencies
 
-import com.vanmo.common.IDependency
-import com.vanmo.ioc.{ resolve, CURRENT_SCOPE, SET_SCOPE }
-import com.vanmo.ioc.scopes.IScope
-
 import scala.util.{ Failure, Success, Try }
-import com.vanmo.ioc.GlobalScope
+
+import com.vanmo.common.IDependency
+import com.vanmo.ioc.scopes.IScope
+import com.vanmo.ioc.{CURRENT_SCOPE, GlobalScope, SET_SCOPE, resolve}
+import com.vanmo.tests.context
 
 object Execute extends IDependency[IScope, Execute.ScopeGuard] {
   class ScopeGuard(scope: IScope, originalScope: IScope) {

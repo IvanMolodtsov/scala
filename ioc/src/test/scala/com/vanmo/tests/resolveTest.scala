@@ -1,8 +1,9 @@
 package com.vanmo.tests
 
-import org.scalatest.funsuite.AnyFunSuite
 import scala.util.Try
+
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.funsuite.AnyFunSuite
 
 class resolveTest extends AnyFunSuite with BeforeAndAfterEach {
   import com.vanmo.ioc._

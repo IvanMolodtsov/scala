@@ -1,8 +1,11 @@
 package com.vanmo.ioc.scopes
 
+import scala.collection.mutable
+import scala.util.{ Failure, Success, Try }
+
 import com.vanmo.common.{ IDependency, Store }
-import com.vanmo.ioc.errors.ResolveError
 import com.vanmo.ioc.dependencies.{ Execute, ExecutionScope, NewScope, Register, Unregister }
+import com.vanmo.ioc.errors.ResolveError
 import com.vanmo.ioc.{
   resolve,
   CURRENT_SCOPE,
@@ -16,9 +19,6 @@ import com.vanmo.ioc.{
   SET_SCOPE,
   UNREGISTER
 }
-
-import scala.collection.mutable
-import scala.util.{ Failure, Success, Try }
 
 class RootScope extends IScope {
 

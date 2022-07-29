@@ -1,11 +1,11 @@
 package com.vanmo.ioc.dependencies
 
+import scala.util.{Failure, Success, Try}
+
 import com.vanmo.common.{IDependency, Key}
 import com.vanmo.ioc.errors.ResolveError
-import com.vanmo.ioc.{CURRENT_SCOPE, resolve}
 import com.vanmo.ioc.scopes.MutableScope
-
-import scala.util.{Failure, Success, Try}
+import com.vanmo.ioc.{CURRENT_SCOPE, resolve}
 
 object Register extends IDependency[Null, Register.Command] {
 

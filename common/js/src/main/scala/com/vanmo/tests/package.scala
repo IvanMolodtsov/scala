@@ -1,18 +1,19 @@
 package com.vanmo
 
-import scala.concurrent.Future
+import scala.concurrent.{Future, ExecutionContext}
+import scala.util.Try
+
 import scalajs.js
-import scala.concurrent.ExecutionContext
 
 package object tests {
   import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits
 
   val context: ExecutionContext = Implicits.global
 
-  def await(f: Future[Any], e: => Any) =
+  def await[T](f: Future[T], e: Option[Try[T]] => Any) =
     js.timers.setTimeout(1) {
       if (f.isCompleted) {
-        e
+        e(f.value)
       } else {
         throw new Error("await failed")
       }

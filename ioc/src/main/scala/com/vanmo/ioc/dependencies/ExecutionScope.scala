@@ -1,10 +1,11 @@
 package com.vanmo.ioc.dependencies
 
-import com.vanmo.common.IDependency
 import scala.concurrent.ExecutionContext
-import com.vanmo.ioc.{ resolve, CURRENT_SCOPE, EXECUTE_IN_SCOPE, NEW_SCOPE }
 import scala.util.{ Failure, Success }
+
+import com.vanmo.common.IDependency
 import com.vanmo.ioc.scopes.IScope
+import com.vanmo.ioc.{ resolve, CURRENT_SCOPE, EXECUTE_IN_SCOPE, NEW_SCOPE }
 
 object ExecutionScope extends IDependency[ExecutionContext, ExecutionContext] {
 

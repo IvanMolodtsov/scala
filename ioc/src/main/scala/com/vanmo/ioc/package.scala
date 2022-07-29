@@ -1,9 +1,10 @@
 package com.vanmo
 
+import scala.concurrent.Future
+
 import com.vanmo.common.{ IDependency, Key }
 import com.vanmo.ioc.dependencies.{ Execute, Register, Unregister }
 import com.vanmo.ioc.scopes.{ IScope, RootScope, Scope }
-import scala.concurrent.Future
 
 package object ioc {
 

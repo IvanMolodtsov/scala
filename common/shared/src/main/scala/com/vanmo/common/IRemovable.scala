@@ -1,5 +1,5 @@
 package com.vanmo.common
 
-trait IRemovalbe {
+trait IRemovable {
   def remove(key: String): Unit
 }
